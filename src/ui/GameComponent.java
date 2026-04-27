@@ -16,40 +16,6 @@ public class GameComponent extends JComponent {
 
 	public GameComponent(GameModel model) {
 		this.model = new GameModel();
-		
-		super.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-		            System.out.println("Spacebar pressed!");
-		        }	
-				
-				switch (e.getKeyCode()) {
-				case KeyEvent.VK_W:
-					model.movePlayerUp(5);
-				case KeyEvent.VK_S:
-					model.movePlayerDown(5);
-				case KeyEvent.VK_A:
-					model.movePlayerLeft(5);
-				case KeyEvent.VK_D:
-					model.movePlayerRight(5);
-
-				}
-			}
-		});
 	}
 
 
