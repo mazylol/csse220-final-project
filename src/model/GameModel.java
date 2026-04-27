@@ -10,5 +10,29 @@ package model;
  * Drawing belongs in GameComponent.
  */
 public class GameModel {
-
+	private Player player;
+	
+	public GameModel() {
+		this.player = new Player(5, 5);
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	public void movePlayerUp(int y) {
+		player.moveBy(-y, 0);
+	};
+	
+	public void movePlayerDown(int y) {
+		player.moveBy(y, 0);
+	};
+	
+	public void movePlayerLeft(int x) {
+		player.moveBy(x, 0);
+	};
+	
+	public void movePlayerRight(int x) {
+		player.moveBy(x, 0);
+	};
 }
