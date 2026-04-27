@@ -5,7 +5,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class GameMenu extends JPanel{
+public class GameMenu extends JPanel {
 	private JButton leftButton;
 	private JButton rightButton;
 	private JButton centerButton;

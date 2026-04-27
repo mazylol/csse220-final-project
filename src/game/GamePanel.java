@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 
 
-public class GamePanel extends JPanel{
+public class GamePanel extends JPanel {
 	private GameComponent canvas;
 	private GameMenu menu;
 
