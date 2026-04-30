@@ -20,19 +20,19 @@ public class GameModel {
 		return this.player;
 	}
 	
-	public void movePlayerUp(int y) {
-		player.moveBy(-y, 0);
+	public void movePlayerUp(int n) {
+		player.moveBy(-n, 0);
 	};
 	
-	public void movePlayerDown(int y) {
-		player.moveBy(y, 0);
+	public void movePlayerDown(int n) {
+		player.moveBy(n, 0);
 	};
 	
-	public void movePlayerLeft(int x) {
-		player.moveBy(x, 0);
+	public void movePlayerLeft(int n) {
+		player.moveBy(0, -n);
 	};
 	
-	public void movePlayerRight(int x) {
-		player.moveBy(x, 0);
+	public void movePlayerRight(int n) {
+		player.moveBy(0, n);
 	};
 }
