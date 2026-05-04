@@ -8,18 +8,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- * Holds the current position, dimensions, start position, sprite and the game window dimensions (used for collisions).
- * 
- * Has getters for position. Methods for drawing and movement.
+ * Similar to the player class but defines an update method that handles some simple automatic movement.
  */
-public class Player {
+public class Zombie {
 	private int x, y;
 	private int width, height;
 	private int startX, startY;
 	private BufferedImage sprite;
 	private int gameWidth, gameHeight;
+	private int dx = 3;
+	private int dy = 2;
 	
-	public Player(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
+	public Zombie(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
 		this.y = startY;
 		this.width = width;
@@ -30,7 +30,7 @@ public class Player {
 		this.gameHeight = gameHeight;
 		
 		try {
-			sprite = ImageIO.read(Player.class.getResource("/player.png"));
+			sprite = ImageIO.read(Zombie.class.getResource("/zombie.png"));
 		} catch (IOException | IllegalArgumentException e) {
 			sprite = null;
 		}
@@ -48,20 +48,36 @@ public class Player {
 		if (sprite != null) {
 			g2.drawImage(sprite, x, y, width, height, null);
 		} else {
-			g2.setColor(Color.BLUE);
+			g2.setColor(Color.GREEN);
 			g2.fillRect(x, y, width, height);
 		}
 	}
 	
-	public void moveBy(int dx, int dy) {
+	public void update() {
 		x += dx;
 		y += dy;
 		
-		// Wall collision detection
-		if (x < 0) x = 0;
-		if (x + width > gameWidth) x = gameWidth - width;
-		if (y < 0) y = 0;
-		if (y + height > gameHeight) y = gameHeight - height;
+		// LEFT / RIGHT walls
+		if (x <= 0) {
+			x = 0;
+			dx = -dx;
+		}
+		
+		if (x + width >= gameWidth) {
+			x = gameWidth - width;
+			dx = -dx;
+		}
+		
+		// TOP / BOTTOM walls
+		if (y <= 0) {
+			y = 0;
+			dy = -dy;
+		}
+		
+		if (y + height >= gameHeight) {
+			y = gameHeight - height;
+			dy = -dy;
+		}
 	}
 	
 	public void reset() {

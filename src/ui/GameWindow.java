@@ -9,8 +9,12 @@ import javax.swing.Timer;
 
 import model.GameModel;
 
+/**
+ * Deals with the main game window. Defines player movement steps (aka speed), and frame delays via a timer.
+ * Starts the main game loop and also adds a listener for key presses and binds wasd/up,down,left,right to the player movement.
+ */
 public class GameWindow extends JPanel {
-	private static final int MOVE_STEP = 1;
+	private static final int MOVE_STEP = 5;
 	private static final int FRAME_DELAY_MS = 30;
 
 	private final JFrame frame;
