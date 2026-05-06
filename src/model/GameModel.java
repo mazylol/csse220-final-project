@@ -14,8 +14,8 @@ public class GameModel {
 	private Zombie zombie;
 	public static final int GAME_WIDTH = 600;
 	public static final int GAME_HEIGHT = 600;
-	public static final int PLAYER_SIZE = 60;
-	public static final int ZOMBIE_SIZE = 60;
+	public static final int PLAYER_SIZE = 40;
+	public static final int ZOMBIE_SIZE = 40;
 	
 	public GameModel() {
 		this.player = new Player(50, 50, PLAYER_SIZE, PLAYER_SIZE, GAME_WIDTH, GAME_HEIGHT);

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -34,17 +35,25 @@ public class GameComponent extends JPanel {
 		this.setBackground(BG);
 		this.setOpaque(true);
 		
-		try {
-			background = ImageIO.read(GameComponent.class.getResource("/background.png"));
-		} catch (IOException | IllegalArgumentException e) {
-			background = null;
-		}
+		background = loadBackground();
 		
 		timer = new Timer(30, e -> {
 			model.update();
 			repaint();
 		});
 		timer.start();
+	}
+	
+	private BufferedImage loadBackground() {
+		try {
+			var resource = GameComponent.class.getResource("/sprites/background.png");
+			if (resource != null) {
+				return ImageIO.read(resource);
+			}
+			return ImageIO.read(new File("src/sprites/background.png"));
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 

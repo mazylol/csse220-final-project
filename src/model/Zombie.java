@@ -3,6 +3,7 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -29,10 +30,18 @@ public class Zombie {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		
+		sprite = loadSprite();
+	}
+
+	private BufferedImage loadSprite() {
 		try {
-			sprite = ImageIO.read(Zombie.class.getResource("/zombie.png"));
-		} catch (IOException | IllegalArgumentException e) {
-			sprite = null;
+			var resource = Zombie.class.getResource("/sprites/zombie.png");
+			if (resource != null) {
+				return ImageIO.read(resource);
+			}
+			return ImageIO.read(new File("src/sprites/zombie.png"));
+		} catch (IOException e) {
+			return null;
 		}
 	}
 	
