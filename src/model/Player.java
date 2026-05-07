@@ -77,4 +77,8 @@ public class Player {
 		this.x = startX;
 		this.y = startY;
 	}
+	
+	public void handleZombieCollision(){
+		System.out.println("collision");
+	}
 }

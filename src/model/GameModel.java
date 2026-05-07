@@ -49,4 +49,12 @@ public class GameModel {
 	public void movePlayerRight(int n) {
 		player.moveBy(n, 0);
 	};
+	
+	public void checkZombieCollision(){
+			boolean compareX = (player.getX()+PLAYER_SIZE>=zombie.getX())&&(player.getX()<=zombie.getX()+ZOMBIE_SIZE);
+			boolean compareY = (player.getY()+PLAYER_SIZE>=zombie.getY())&&(player.getY()<=zombie.getY()+ZOMBIE_SIZE);
+			if(compareX&&compareY) {
+				player.handleZombieCollision();
+			}
+	}
 }

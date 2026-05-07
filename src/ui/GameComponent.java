@@ -40,6 +40,7 @@ public class GameComponent extends JPanel {
 		timer = new Timer(30, e -> {
 			model.update();
 			repaint();
+			model.checkZombieCollision();
 		});
 		timer.start();
 	}
