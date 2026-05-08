@@ -19,6 +19,7 @@ public class Player {
 	private int startX, startY;
 	private BufferedImage sprite;
 	private int gameWidth, gameHeight;
+	private boolean facingRight;
 	
 	public Player(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -29,6 +30,7 @@ public class Player {
 		this.startY = startY;
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
+		this.facingRight = true;
 		
 		sprite = loadSprite();
 	}
@@ -55,7 +57,11 @@ public class Player {
 	
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
-			g2.drawImage(sprite, x, y, width, height, null);
+			if (facingRight) {
+				g2.drawImage(sprite, x, y, width, height, null);
+			} else {
+				g2.drawImage(sprite, x + width, y, -width, height, null);
+			}
 		} else {
 			g2.setColor(Color.BLUE);
 			g2.fillRect(x, y, width, height);
@@ -63,6 +69,12 @@ public class Player {
 	}
 	
 	public void moveBy(int dx, int dy) {
+		if (dx > 0) {
+			facingRight = true;
+		} else if (dx < 0) {
+			facingRight = false;
+		}
+
 		x += dx;
 		y += dy;
 		

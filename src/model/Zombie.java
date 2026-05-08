@@ -17,8 +17,9 @@ public class Zombie {
 	private int startX, startY;
 	private BufferedImage sprite;
 	private int gameWidth, gameHeight;
-	private int dx = 3;
+	private int dx = -3;
 	private int dy = 2;
+	private boolean facingRight;
 	
 	public Zombie(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -29,6 +30,7 @@ public class Zombie {
 		this.startY = startY;
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
+		this.facingRight = false;
 		
 		sprite = loadSprite();
 	}
@@ -55,7 +57,11 @@ public class Zombie {
 	
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
-			g2.drawImage(sprite, x, y, width, height, null);
+			if (facingRight) {
+				g2.drawImage(sprite, x + width, y, -width, height, null);
+			} else {
+				g2.drawImage(sprite, x, y, width, height, null);
+			}
 		} else {
 			g2.setColor(Color.GREEN);
 			g2.fillRect(x, y, width, height);
@@ -86,6 +92,12 @@ public class Zombie {
 		if (y + height >= gameHeight) {
 			y = gameHeight - height;
 			dy = -dy;
+		}
+
+		if (dx > 0) {
+			facingRight = true;
+		} else if (dx < 0) {
+			facingRight = false;
 		}
 	}
 	
