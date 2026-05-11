@@ -35,6 +35,7 @@ public class GameComponent extends JPanel {
 	private BufferedImage gemSprite;
 	private BufferedImage doorSprite;
 	private Timer timer;
+	public static int GameTime;
 
 	public GameComponent(GameModel model) {
 		this.model = model;
@@ -52,8 +53,12 @@ public class GameComponent extends JPanel {
 			model.update();
 			model.checkZombieCollision();
 			repaint();
+			GameTime++;
 		});
 		timer.start();
+	}
+	public static int getTime() {
+		return GameTime;
 	}
 	
 	private BufferedImage loadBackground() {
@@ -147,15 +152,20 @@ public class GameComponent extends JPanel {
 
 	private void drawHud(Graphics2D g2) {
 		g2.setColor(new Color(0, 0, 0, 140));
-		g2.fillRoundRect(8, 8, 220, 56, 8, 8);
+		g2.fillRoundRect(8, 8, 220, 70, 8, 8);
 		g2.setColor(Color.WHITE);
 		g2.setFont(new Font("SansSerif", Font.BOLD, 13));
 		g2.drawString("Gems left: " + model.getGemsRemaining(), 16, 30);
 		g2.drawString("Key: " + (model.hasKey() ? "Yes" : "No"), 16, 48);
+		g2.drawString("Health: " + model.getHealth(), 16, 66);
 		if (model.hasWon()) {
 			g2.setColor(new Color(20, 150, 20));
 			g2.setFont(new Font("SansSerif", Font.BOLD, 28));
 			g2.drawString("LEVEL COMPLETE", 180, 320);
+		}else if(model.hasLost()) {
+			g2.setColor(Color.RED);
+			g2.setFont(new Font("SansSerif", Font.BOLD, 28));
+			g2.drawString("GAME OVER", 200,320);
 		}
 	}
 }

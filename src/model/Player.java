@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ui.GameComponent;
+
 /**
  * Holds the current position, dimensions, start position, sprite and the game window dimensions (used for collisions).
  * 
@@ -20,6 +22,8 @@ public class Player {
 	private BufferedImage sprite;
 	private int gameWidth, gameHeight;
 	private boolean facingRight;
+	private int health;
+	private int damageTime;
 	
 	public Player(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -31,7 +35,7 @@ public class Player {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.facingRight = true;
-		
+		this.health = 3;
 		sprite = loadSprite();
 	}
 	
@@ -90,7 +94,23 @@ public class Player {
 		this.y = startY;
 	}
 	
-	public void handleZombieCollision(){
-		System.out.println("collision");
+	public int getHealth() {
+		return health;
+	}
+	public void handleZombieCollision() {
+		if(GameComponent.getTime()-30>=damageTime) {
+			this.handleDamage();
+			damageTime=GameComponent.getTime();
+		}else {
+		}
+	}
+	public void handleDamage() {
+		if(this.health>1) {
+			health--;
+		}
+		else if(this.health==1) {
+			health = 0;
+			GameModel.GameOver();
+		}
 	}
 }

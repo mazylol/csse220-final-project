@@ -29,6 +29,7 @@ public class GameModel {
 	private int gemsRemaining;
 	private boolean hasKey;
 	private boolean won;
+	private static boolean lost;
 	
 	public GameModel() {
 		this.zombies = new ArrayList<>();
@@ -57,6 +58,9 @@ public class GameModel {
 
 	public boolean hasWon() {
 		return this.won;
+	}
+	public boolean hasLost() {
+		return this.lost;
 	}
 	
 	public void update() {
@@ -87,7 +91,7 @@ public class GameModel {
 			boolean compareY = (player.getY() + PLAYER_SIZE >= zombie.getY()) && (player.getY() <= zombie.getY() + ZOMBIE_SIZE);
 			if(compareX&&compareY) {
 				player.handleZombieCollision();
-				player.reset();
+				//player.reset();
 				return;
 			}
 		}
@@ -224,5 +228,13 @@ public class GameModel {
 
 	private boolean isInBounds(int row, int col) {
 		return row >= 0 && row < level.size() && col >= 0 && col < level.get(row).size();
+	}
+
+	public int getHealth() {
+		return player.getHealth();
+	}
+	
+	public static void GameOver() {
+		lost = true;
 	}
 }
