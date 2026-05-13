@@ -65,6 +65,10 @@ public class GameModel {
 	
 	public void update() {
 		for (Zombie zombie : zombies) {
+			if(checkZombieWallCollision(zombie)) {
+				zombie.backTrack();
+				zombie.updateDirection();
+			}
 			zombie.update();
 		}
 	}
@@ -184,6 +188,23 @@ public class GameModel {
 		applyTileEffects();
 	}
 
+	public boolean checkZombieWallCollision(Zombie zombie) {
+		int leftCol = zombie.getX() / TILE_SIZE;
+		int rightCol = (zombie.getX() + zombie.getWidth() - 1) / TILE_SIZE;
+		int topRow = zombie.getY() / TILE_SIZE;
+		int bottomRow = (zombie.getY() + zombie.getHeight() - 1) / TILE_SIZE;
+		for (int row = topRow; row <= bottomRow; row++) {
+			for (int col = leftCol; col <= rightCol; col++) {
+				if (!isInBounds(row, col)) {
+					continue;
+				}
+				if (level.get(row).get(col) == Item.Wall) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	private boolean isWallCollision(int x, int y, int width, int height) {
 		int leftCol = x / TILE_SIZE;
 		int rightCol = (x + width - 1) / TILE_SIZE;

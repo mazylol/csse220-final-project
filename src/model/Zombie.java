@@ -103,6 +103,8 @@ public class Zombie {
 		} else if (dx < 0) {
 			facingRight = false;
 		}
+		
+		
 	}
 	
 	public void updateDirection() {
@@ -138,4 +140,26 @@ public class Zombie {
 		this.x = startX;
 		this.y = startY;
 	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	public int getDX() {
+		return dx;
+	}
+	
+	public int getDY() {
+		return dy;
+	}
+	
+	public void backTrack() {
+		this.x-=5*dx;
+		this.y-=5*dy;
+	}
+	
 }
