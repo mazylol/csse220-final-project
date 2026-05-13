@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import model.GameModel;
@@ -34,7 +35,6 @@ public class GameWindow extends JPanel {
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//this.frame.setContentPane(this.gameComponent);
 		JPanel cards = new JPanel(new CardLayout());
 		StartPanel startPanel = new StartPanel();
 		cards.add(startPanel, "START");
@@ -75,6 +75,7 @@ public class GameWindow extends JPanel {
 		startPanel.button.addActionListener(e -> {
 		    this.gameComponent.startTimer();
 		    cl.show(cards, "GAME");
+		    SwingUtilities.invokeLater(() -> this.gameComponent.requestFocusInWindow()); // without this input does not work, future self: might need this again
 		});
 
 		this.gameLoop = new Timer(FRAME_DELAY_MS, e -> {
