@@ -55,8 +55,13 @@ public class GameComponent extends JPanel {
 			repaint();
 			GameTime++;
 		});
-		timer.start();
+		//timer.start();
 	}
+	
+	public void startTimer() {
+	    timer.start();
+	}	
+	
 	public static int getTime() {
 		return GameTime;
 	}

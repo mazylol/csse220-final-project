@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -32,7 +33,18 @@ public class GameWindow extends JPanel {
 		this.gameComponent = new GameComponent(this.model);
 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.add(this.gameComponent);
+		
+		//this.frame.setContentPane(this.gameComponent);
+		JPanel cards = new JPanel(new CardLayout());
+		StartPanel startPanel = new StartPanel();
+		cards.add(startPanel, "START");
+		cards.add(this.gameComponent, "GAME");
+		
+		this.frame.setContentPane(cards);
+		
+		CardLayout cl = (CardLayout) cards.getLayout();
+		cl.show(cards, "START");
+		
 		this.frame.pack();
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setResizable(false);
@@ -58,6 +70,11 @@ public class GameWindow extends JPanel {
 					case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> movingRight = false;
 				}
 			}
+		});
+		
+		startPanel.button.addActionListener(e -> {
+		    this.gameComponent.startTimer();
+		    cl.show(cards, "GAME");
 		});
 
 		this.gameLoop = new Timer(FRAME_DELAY_MS, e -> {
