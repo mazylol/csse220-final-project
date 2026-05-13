@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -20,6 +21,8 @@ public class Zombie {
 	private int dx = -3;
 	private int dy = 2;
 	private boolean facingRight;
+	private int direction; // 8 directions measured 1-8 counterclockwise starting with 1 pointing right
+	public static Random random = new Random();
 	
 	public Zombie(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -31,6 +34,7 @@ public class Zombie {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.facingRight = false;
+		updateDirection();
 		
 		sprite = loadSprite();
 	}
@@ -69,8 +73,8 @@ public class Zombie {
 	}
 	
 	public void update() {
-		x += dx;
-		y += dy;
+		x += 3*dx;
+		y += 2*dy;
 		
 		// LEFT / RIGHT walls
 		if (x <= 0) {
@@ -98,6 +102,35 @@ public class Zombie {
 			facingRight = true;
 		} else if (dx < 0) {
 			facingRight = false;
+		}
+	}
+	
+	public void updateDirection() {
+		direction = random.nextInt(8) + 1;
+		if(direction == 1) {
+			dx=1;
+			dy=0;
+		}else if(direction == 2) {
+			dx=1;
+			dy=1;
+		}else if(direction == 3) {
+			dx=0;
+			dy=1;
+		}else if(direction == 4) {
+			dx=-1;
+			dy=1;
+		}else if(direction == 5) {
+			dx=-1;
+			dy=0;
+		}else if(direction == 6) {
+			dx=-1;
+			dy=-1;
+		}else if(direction == 7) {
+			dx=0;
+			dy=-1;
+		}else if(direction == 8) {
+			dx=1;
+			dy=-1;
 		}
 	}
 	
