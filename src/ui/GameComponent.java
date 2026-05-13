@@ -29,7 +29,6 @@ public class GameComponent extends JPanel {
 	public static final Color FG = Color.BLACK;
 
 	private final GameModel model;
-	private BufferedImage background;
 	private BufferedImage floorSprite;
 	private BufferedImage wallSprite;
 	private BufferedImage gemSprite;
@@ -43,11 +42,10 @@ public class GameComponent extends JPanel {
 		this.setBackground(BG);
 		this.setOpaque(true);
 		
-		background = loadBackground();
-		floorSprite = loadSprite("/sprites/floor.png", "src/sprites/floor.png");
-		wallSprite = loadSprite("/sprites/wall.png", "src/sprites/wall.png");
-		gemSprite = loadSprite("/sprites/gem.png", "src/sprites/gem.png");
-		doorSprite = loadSprite("/sprites/door.png", "src/sprites/door.png");
+		floorSprite = loadResource("/sprites/floor.png", "src/sprites/floor.png");
+		wallSprite = loadResource("/sprites/wall.png", "src/sprites/wall.png");
+		gemSprite = loadResource("/sprites/gem.png", "src/sprites/gem.png");
+		doorSprite = loadResource("/sprites/door.png", "src/sprites/door.png");
 		
 		timer = new Timer(30, e -> {
 			model.update();
@@ -66,19 +64,7 @@ public class GameComponent extends JPanel {
 		return GameTime;
 	}
 	
-	private BufferedImage loadBackground() {
-		try {
-			var resource = GameComponent.class.getResource("/sprites/background.png");
-			if (resource != null) {
-				return ImageIO.read(resource);
-			}
-			return ImageIO.read(new File("src/sprites/background.png"));
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	private BufferedImage loadSprite(String resourcePath, String filePath) {
+	private BufferedImage loadResource(String resourcePath, String filePath) {
 		try {
 			var resource = GameComponent.class.getResource(resourcePath);
 			if (resource != null) {
@@ -96,12 +82,8 @@ public class GameComponent extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
-		if (background != null) {
-			g2.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-		} else {
-			g2.setColor(BG);
-			g2.fillRect(0, 0, WIDTH, HEIGHT);
-		}
+		g2.setColor(BG);
+		g2.fillRect(0, 0, WIDTH, HEIGHT);
 
 		drawLevel(g2);
 		
