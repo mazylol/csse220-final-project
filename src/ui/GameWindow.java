@@ -61,6 +61,11 @@ public class GameWindow extends JPanel {
 					case KeyEvent.VK_S, KeyEvent.VK_DOWN -> movingDown = true;
 					case KeyEvent.VK_A, KeyEvent.VK_LEFT -> movingLeft = true;
 					case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> movingRight = true;
+					case KeyEvent.VK_R -> {
+						if (model.hasWon() || model.hasLost()) {
+							restartGame();
+						}
+					}
 				}
 			}
 
@@ -103,6 +108,14 @@ public class GameWindow extends JPanel {
 				gameComponent.repaint();
 			}
 		});
+	}
+	
+	private void restartGame() {
+		movingUp = false;
+		movingDown = false;
+		movingLeft = false;
+		movingRight = false;
+		this.gameComponent.restartGame();
 	}
 
 	public void show() {

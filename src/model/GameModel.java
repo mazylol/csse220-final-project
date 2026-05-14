@@ -122,6 +122,7 @@ public class GameModel {
 		this.gemsRemaining = 0;
 		this.hasKey = false;
 		this.won = false;
+		lost = false;
 		int playerX = 50;
 		int playerY = 50;
 		
@@ -181,7 +182,7 @@ public class GameModel {
 	 * Moves the player, resolves wall collisions, and applies tile effects.
 	 */
 	private void movePlayerBy(int dx, int dy) {
-		if (won) {
+		if (won || lost) {
 			return;
 		}
 
@@ -266,5 +267,9 @@ public class GameModel {
 	
 	public static void GameOver() {
 		lost = true;
+	}
+	
+	public void restartGame() {
+		loadLevel(DEFAULT_LEVEL);
 	}
 }

@@ -64,6 +64,14 @@ public class GameComponent extends JPanel {
 	    timer.start();
 	}	
 	
+	public void restartGame() {
+		timer.stop();
+		GameTime = 0;
+		model.restartGame();
+		repaint();
+		timer.start();
+	}
+	
 	public static int getTime() {
 		return GameTime;
 	}
@@ -151,10 +159,16 @@ public class GameComponent extends JPanel {
 			g2.setColor(new Color(20, 150, 20));
 			g2.setFont(new Font("SansSerif", Font.BOLD, 28));
 			g2.drawString("LEVEL COMPLETE", 180, 320);
+			g2.setFont(new Font("SansSerif", Font.BOLD, 16));
+			g2.setColor(Color.WHITE);
+			g2.drawString("Press R to restart", 220, 350);
 		}else if(model.hasLost()) {
 			g2.setColor(Color.RED);
 			g2.setFont(new Font("SansSerif", Font.BOLD, 28));
 			g2.drawString("GAME OVER", 200,320);
+			g2.setFont(new Font("SansSerif", Font.BOLD, 16));
+			g2.setColor(Color.WHITE);
+			g2.drawString("Press R to restart", 220, 350);
 		}
 	}
 }
