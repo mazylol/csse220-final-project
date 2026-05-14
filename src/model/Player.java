@@ -11,9 +11,12 @@ import javax.imageio.ImageIO;
 import ui.GameComponent;
 
 /**
- * Holds the current position, dimensions, start position, sprite and the game window dimensions (used for collisions).
- * 
- * Has getters for position. Methods for drawing and movement.
+ * Represents the player avatar and its state in the game world.
+ *
+ * Fields: x, y, width, height, startX, startY, sprite, gameWidth, gameHeight,
+ * facingRight, health, damageTime.
+ * Methods: Player(...), loadSprite(), getX(), getY(), drawOn(...), moveBy(...),
+ * reset(), getHealth(), handleZombieCollision(), handleDamage().
  */
 public class Player {
 	private int x, y;
@@ -97,6 +100,10 @@ public class Player {
 	public int getHealth() {
 		return health;
 	}
+	
+	/**
+	 * Applies contact damage with a short invulnerability cooldown.
+	 */
 	public void handleZombieCollision() {
 		if(GameComponent.getTime()-30>=damageTime) {
 			this.handleDamage();
@@ -104,6 +111,10 @@ public class Player {
 		}else {
 		}
 	}
+	
+	/**
+	 * Decrements health and triggers game over when health reaches zero.
+	 */
 	public void handleDamage() {
 		if(this.health>1) {
 			health--;

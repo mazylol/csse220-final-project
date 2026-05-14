@@ -10,7 +10,13 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 /**
- * Similar to the player class but defines an update method that handles some simple automatic movement.
+ * Represents an enemy that moves automatically and bounces around the map.
+ *
+ * Fields: x, y, width, height, startX, startY, sprite, gameWidth, gameHeight,
+ * dx, dy, facingRight, direction, random.
+ * Methods: Zombie(...), loadSprite(), getX(), getY(), drawOn(...), update(),
+ * updateDirection(), reset(), getWidth(), getHeight(), getDX(), getDY(),
+ * backTrack().
  */
 public class Zombie {
 	private int x, y;
@@ -72,6 +78,7 @@ public class Zombie {
 		}
 	}
 	
+	/** Advances zombie movement and bounces off world boundaries. */
 	public void update() {
 		x += 3*dx;
 		y += 2*dy;
@@ -107,6 +114,7 @@ public class Zombie {
 		
 	}
 	
+	/** Picks one of eight movement directions and updates dx/dy. */
 	public void updateDirection() {
 		direction = random.nextInt(8) + 1;
 		if(direction == 1) {

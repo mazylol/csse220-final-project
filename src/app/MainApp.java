@@ -6,7 +6,10 @@ import ui.GameWindow;
 import model.GameModel;
 
 /**
- * This is the entry point for our game. Initializes the GameModel, a GameWindow with that model, and then shows it.
+ * Application entry point that boots the game UI.
+ *
+ * Fields: none.
+ * Methods: main(...), run().
  */
 
 public class MainApp {

@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Stores the current state of the game and controls the main game rules.
- * 
- * This is where the game keeps track of objects such as the player,
- * walls, zombies.
- * 
- * GameModel updates the game state, does not draw anything. (for internal reference)
- * Drawing belongs in GameComponent.
+ * Stores and updates all game state and core rules.
+ *
+ * Fields: player, zombies, level, GAME_WIDTH, GAME_HEIGHT, PLAYER_SIZE,
+ * ZOMBIE_SIZE, TILE_SIZE, DEFAULT_LEVEL, gemsRemaining, hasKey, won, lost.
+ * Methods: GameModel(), getPlayer(), getZombies(), getLevel(),
+ * getGemsRemaining(), hasKey(), hasWon(), hasLost(), update(),
+ * movePlayerUp(...), movePlayerDown(...), movePlayerLeft(...),
+ * movePlayerRight(...), checkZombieCollision(), loadLevel(...),
+ * movePlayerBy(...), checkZombieWallCollision(...), isWallCollision(...),
+ * applyTileEffects(), isInBounds(...), getHealth(), GameOver().
  */
 public class GameModel {
 	private Player player;
@@ -59,6 +62,7 @@ public class GameModel {
 	public boolean hasWon() {
 		return this.won;
 	}
+	
 	public boolean hasLost() {
 		return this.lost;
 	}
@@ -101,6 +105,7 @@ public class GameModel {
 		}
 	}
 	
+	/** Tile types used in parsed level data. */
 	public enum Item {
 		Wall,
 		Player,
@@ -172,6 +177,9 @@ public class GameModel {
 		this.player = new Player(playerX, playerY, PLAYER_SIZE, PLAYER_SIZE, GAME_WIDTH, GAME_HEIGHT);
 	}
 
+	/**
+	 * Moves the player, resolves wall collisions, and applies tile effects.
+	 */
 	private void movePlayerBy(int dx, int dy) {
 		if (won) {
 			return;
@@ -205,6 +213,7 @@ public class GameModel {
 		}
 		return false;
 	}
+	
 	private boolean isWallCollision(int x, int y, int width, int height) {
 		int leftCol = x / TILE_SIZE;
 		int rightCol = (x + width - 1) / TILE_SIZE;

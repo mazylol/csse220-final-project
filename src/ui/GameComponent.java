@@ -18,9 +18,13 @@ import model.GameModel;
 import model.Zombie;
 
 /**
- * The main game component. Defined the window width/height as well as the colors. Also starts a timer.
- * 
- * Calls the method for calling the drawing methods for Player and Zombie.
+ * Main rendering panel for the game world and HUD.
+ *
+ * Fields: WIDTH, HEIGHT, BG, FG, model, floorSprite, wallSprite, gemSprite,
+ * doorSprite, timer, GameTime.
+ * Methods: GameComponent(...), startTimer(), getTime(), loadResource(...),
+ * paintComponent(...), drawLevel(...), drawFloorTile(...),
+ * drawWithFallback(...), drawHud(...).
  */
 public class GameComponent extends JPanel {
 	public static final int WIDTH = 600;
@@ -76,7 +80,6 @@ public class GameComponent extends JPanel {
 		}
 	}
 
-
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -127,7 +130,6 @@ public class GameComponent extends JPanel {
 		}
 	}
 
-	// draw function with a fallback to drawing a simple color, just in case the sprite did not load
 	private void drawWithFallback(Graphics2D g2, BufferedImage sprite, int x, int y, Color fallbackColor) {
 		if (sprite != null) {
 			g2.drawImage(sprite, x, y, GameModel.TILE_SIZE, GameModel.TILE_SIZE, null);

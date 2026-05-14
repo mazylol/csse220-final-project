@@ -6,6 +6,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * Simple start screen panel shown before gameplay begins.
+ *
+ * Fields: title, button.
+ * Methods: StartPanel().
+ */
 public class StartPanel extends JPanel {
 	private JLabel title;
 	public JButton button;
