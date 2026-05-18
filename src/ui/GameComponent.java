@@ -37,6 +37,7 @@ public class GameComponent extends JPanel {
 	private BufferedImage wallSprite;
 	private BufferedImage gemSprite;
 	private BufferedImage doorSprite;
+	private BufferedImage keySprite;
 	private Timer timer;
 	public static int GameTime;
 
@@ -50,6 +51,7 @@ public class GameComponent extends JPanel {
 		wallSprite = loadResource("/sprites/wall.png", "src/sprites/wall.png");
 		gemSprite = loadResource("/sprites/gem.png", "src/sprites/gem.png");
 		doorSprite = loadResource("/sprites/door.png", "src/sprites/door.png");
+		keySprite = loadResource("/sprites/key.png", "src/sprites/key.png");
 		
 		timer = new Timer(30, e -> {
 			model.update();
@@ -117,10 +119,7 @@ public class GameComponent extends JPanel {
 				switch (item) {
 					case Wall -> drawWithFallback(g2, wallSprite, x, y, Color.DARK_GRAY);
 					case Gem -> drawWithFallback(g2, gemSprite, x, y, Color.CYAN);
-					case Key -> {
-						g2.setColor(Color.YELLOW);
-						g2.fillOval(x + 10, y + 10, GameModel.TILE_SIZE - 20, GameModel.TILE_SIZE - 20);
-					}
+					case Key -> drawWithFallback(g2, keySprite, x, y, Color.YELLOW);
 					case Exit -> drawWithFallback(g2, doorSprite, x, y, model.hasKey() ? new Color(70, 180, 70) : new Color(170, 90, 50));
 					default -> {
 					}
