@@ -273,6 +273,7 @@ public class GameModel {
 	}
 	
 	public void restartGame() {
+		currentLevel = 1;
 		loadLevel(DEFAULT_LEVEL);
 	}
 	
