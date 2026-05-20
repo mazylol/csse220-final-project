@@ -29,14 +29,17 @@ public class GameModel {
 	public static final int ZOMBIE_SIZE = 40;
 	public static final int TILE_SIZE = 40;
 	private static final String DEFAULT_LEVEL = "/level1.csv";
+	public static final String NEXT_LEVEL = "/level2.csv";
 	private int gemsRemaining;
 	private boolean hasKey;
 	private boolean won;
 	private static boolean lost;
+	public static int currentLevel;
 	
 	public GameModel() {
 		this.zombies = new ArrayList<>();
 		loadLevel(DEFAULT_LEVEL);
+		currentLevel = 1;
 	}
 	
 	public Player getPlayer() {
@@ -271,5 +274,16 @@ public class GameModel {
 	
 	public void restartGame() {
 		loadLevel(DEFAULT_LEVEL);
+	}
+	
+	public boolean getWon() {
+		return won;
+	}
+	
+	public void proceed() {
+		if(won&&currentLevel==1) {
+			loadLevel(NEXT_LEVEL);
+			currentLevel = 2;
+		}
 	}
 }

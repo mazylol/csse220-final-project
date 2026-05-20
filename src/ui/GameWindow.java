@@ -66,6 +66,11 @@ public class GameWindow extends JPanel {
 							restartGame();
 						}
 					}
+					case KeyEvent.VK_N -> {
+						if(model.getWon()) {
+							model.proceed();
+						}
+					}
 				}
 			}
 

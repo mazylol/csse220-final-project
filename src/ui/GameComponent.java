@@ -161,6 +161,7 @@ public class GameComponent extends JPanel {
 			g2.setFont(new Font("SansSerif", Font.BOLD, 16));
 			g2.setColor(Color.WHITE);
 			g2.drawString("Press R to restart", 220, 350);
+			if(model.currentLevel == 1) {g2.drawString("Press N for next Level", 206, 375);}
 		}else if(model.hasLost()) {
 			g2.setColor(Color.RED);
 			g2.setFont(new Font("SansSerif", Font.BOLD, 28));
