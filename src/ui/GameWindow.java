@@ -71,6 +71,10 @@ public class GameWindow extends JPanel {
 							model.proceed();
 						}
 					}
+					case KeyEvent.VK_SPACE -> {
+						model.attemptAttack();
+						gameComponent.repaint();
+					}
 				}
 			}
 

@@ -29,6 +29,10 @@ public class Zombie {
 	private boolean facingRight;
 	private int direction; // 8 directions measured 1-8 counterclockwise starting with 1 pointing right
 	public static Random random = new Random();
+	private int knockbackRemainingX;
+	private int knockbackRemainingY;
+	private int knockbackStepX;
+	private int knockbackStepY;
 	
 	public Zombie(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -112,6 +116,66 @@ public class Zombie {
 		}
 		
 		
+	}
+
+	public void moveBy(int moveX, int moveY) {
+		if (moveX > 0) {
+			facingRight = true;
+		} else if (moveX < 0) {
+			facingRight = false;
+		}
+
+		x += moveX;
+		y += moveY;
+		if (x < 0) x = 0;
+		if (x + width > gameWidth) x = gameWidth - width;
+		if (y < 0) y = 0;
+		if (y + height > gameHeight) y = gameHeight - height;
+	}
+	
+	public void startKnockback(int totalX, int totalY, int durationTicks) {
+		knockbackRemainingX = totalX;
+		knockbackRemainingY = totalY;
+		if (durationTicks <= 0) {
+			knockbackStepX = totalX;
+			knockbackStepY = totalY;
+			return;
+		}
+		knockbackStepX = totalX == 0 ? 0 : (int) Math.copySign(Math.max(1, Math.abs(totalX) / durationTicks), totalX);
+		knockbackStepY = totalY == 0 ? 0 : (int) Math.copySign(Math.max(1, Math.abs(totalY) / durationTicks), totalY);
+	}
+	
+	public boolean applyKnockbackStep() {
+		if (!hasKnockback()) {
+			return false;
+		}
+		int stepX = nextKnockbackStep(knockbackRemainingX, knockbackStepX);
+		int stepY = nextKnockbackStep(knockbackRemainingY, knockbackStepY);
+		moveBy(stepX, stepY);
+		knockbackRemainingX -= stepX;
+		knockbackRemainingY -= stepY;
+		return true;
+	}
+	
+	public boolean hasKnockback() {
+		return knockbackRemainingX != 0 || knockbackRemainingY != 0;
+	}
+	
+	public void clearKnockback() {
+		knockbackRemainingX = 0;
+		knockbackRemainingY = 0;
+		knockbackStepX = 0;
+		knockbackStepY = 0;
+	}
+	
+	private int nextKnockbackStep(int remaining, int step) {
+		if (remaining == 0) {
+			return 0;
+		}
+		if (Math.abs(remaining) < Math.abs(step)) {
+			return remaining;
+		}
+		return step;
 	}
 	
 	/** Picks one of eight movement directions and updates dx/dy. */

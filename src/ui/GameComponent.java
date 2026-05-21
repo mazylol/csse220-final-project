@@ -103,6 +103,13 @@ public class GameComponent extends JPanel {
 		model.getPlayer().drawOn(g2);
 		for (Zombie zombie : model.getZombies()) {
 			zombie.drawOn(g2);
+			if (model.isZombieInAttackRange(zombie)) {
+				g2.setColor(new Color(255, 220, 0, 180));
+				for (int i = 0; i < 3; i++) {
+					g2.drawRect(zombie.getX() - i, zombie.getY() - i,
+							GameModel.ZOMBIE_SIZE - 1 + 2 * i, GameModel.ZOMBIE_SIZE - 1 + 2 * i);
+				}
+			}
 		}
 		drawHud(g2);
 	}

@@ -20,6 +20,13 @@ import ui.GameComponent;
  * reset(), getHealth(), handleZombieCollision(), handleDamage().
  */
 public class Player {
+	public enum FacingDirection {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	}
+
 	private static final int DAMAGE_COOLDOWN_TICKS = 30;
 
 	private int x, y;
@@ -29,6 +36,7 @@ public class Player {
 	private BufferedImage damagedSprite;
 	private int gameWidth, gameHeight;
 	private boolean facingRight;
+	private FacingDirection facingDirection;
 	private int health;
 	private int damageTime;
 	private boolean recentlyDamaged;
@@ -43,6 +51,7 @@ public class Player {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		this.facingRight = true;
+		this.facingDirection = FacingDirection.RIGHT;
 		this.health = 3;
 		sprite = loadSprite();
 		damagedSprite = sprite == null ? null : createDamageTint(sprite);
@@ -67,6 +76,14 @@ public class Player {
 	public int getY() {
 		return this.y;
 	}
+
+	public boolean isFacingRight() {
+		return facingRight;
+	}
+	
+	public FacingDirection getFacingDirection() {
+		return facingDirection;
+	}
 	
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
@@ -85,8 +102,14 @@ public class Player {
 	public void moveBy(int dx, int dy) {
 		if (dx > 0) {
 			facingRight = true;
+			facingDirection = FacingDirection.RIGHT;
 		} else if (dx < 0) {
 			facingRight = false;
+			facingDirection = FacingDirection.LEFT;
+		} else if (dy > 0) {
+			facingDirection = FacingDirection.DOWN;
+		} else if (dy < 0) {
+			facingDirection = FacingDirection.UP;
 		}
 
 		x += dx;

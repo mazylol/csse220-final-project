@@ -20,6 +20,24 @@ import java.util.Scanner;
  * applyTileEffects(), isInBounds(...), getHealth(), GameOver().
  */
 public class GameModel {
+	private static final class AttackInfo {
+		private final int x;
+		private final int y;
+		private final int width;
+		private final int height;
+		private final int pushX;
+		private final int pushY;
+
+		private AttackInfo(int x, int y, int width, int height, int pushX, int pushY) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.pushX = pushX;
+			this.pushY = pushY;
+		}
+	}
+
 	private Player player;
 	private final ArrayList<Zombie> zombies;
 	private ArrayList<ArrayList<Item>> level;
@@ -28,6 +46,10 @@ public class GameModel {
 	public static final int PLAYER_SIZE = 40;
 	public static final int ZOMBIE_SIZE = 40;
 	public static final int TILE_SIZE = 40;
+	private static final int ATTACK_RANGE = 20;
+	private static final int ATTACK_PUSH_DISTANCE = 80;
+	private static final int ATTACK_PUSH_TICKS = 10;
+	private static final int ATTACK_TOLERANCE = 10;
 	private static final String DEFAULT_LEVEL = "/level1.csv";
 	public static final String NEXT_LEVEL = "/level2.csv";
 	private int gemsRemaining;
@@ -72,6 +94,15 @@ public class GameModel {
 	
 	public void update() {
 		for (Zombie zombie : zombies) {
+			if (zombie.hasKnockback()) {
+				int oldX = zombie.getX();
+				int oldY = zombie.getY();
+				if (zombie.applyKnockbackStep() && checkZombieWallCollision(zombie)) {
+					zombie.moveBy(oldX - zombie.getX(), oldY - zombie.getY());
+					zombie.clearKnockback();
+				}
+				continue;
+			}
 			if(checkZombieWallCollision(zombie)) {
 				zombie.backTrack();
 				zombie.updateDirection();
@@ -94,6 +125,49 @@ public class GameModel {
 	
 	public void movePlayerRight(int n) {
 		movePlayerBy(n, 0);
+	}
+
+	public void attemptAttack() {
+		if (won || lost) {
+			return;
+		}
+
+		int playerX = player.getX();
+		int playerY = player.getY();
+		AttackInfo attackInfo = getAttackInfo(playerX, playerY);
+		if (attackInfo == null) {
+			return;
+		}
+
+		for (Zombie zombie : zombies) {
+			if (!rectanglesIntersect(attackInfo.x, attackInfo.y, attackInfo.width, attackInfo.height,
+					zombie.getX(), zombie.getY(), ZOMBIE_SIZE, ZOMBIE_SIZE)) {
+				continue;
+			}
+			if (isTouchingPlayer(playerX, playerY, zombie)) {
+				continue;
+			}
+
+			zombie.startKnockback(attackInfo.pushX, attackInfo.pushY, ATTACK_PUSH_TICKS);
+			return;
+		}
+	}
+
+	public boolean isZombieInAttackRange(Zombie zombie) {
+		if (won || lost) {
+			return false;
+		}
+		int playerX = player.getX();
+		int playerY = player.getY();
+		AttackInfo attackInfo = getAttackInfo(playerX, playerY);
+		if (attackInfo == null) {
+			return false;
+		}
+		if (!rectanglesIntersect(attackInfo.x, attackInfo.y, attackInfo.width, attackInfo.height,
+				zombie.getX(), zombie.getY(), ZOMBIE_SIZE, ZOMBIE_SIZE)) {
+			return false;
+		}
+		return !isTouchingPlayer(playerX, playerY, zombie);
 	}
 	
 	public void checkZombieCollision(){
@@ -258,6 +332,61 @@ public class GameModel {
 				}
 			}
 		}
+	}
+
+	private AttackInfo getAttackInfo(int playerX, int playerY) {
+		Player.FacingDirection facing = player.getFacingDirection();
+		int attackX;
+		int attackY;
+		int attackWidth;
+		int attackHeight;
+		int pushX = 0;
+		int pushY = 0;
+		switch (facing) {
+			case RIGHT -> {
+				attackX = playerX + PLAYER_SIZE;
+				attackY = playerY - ATTACK_TOLERANCE;
+				attackWidth = ATTACK_RANGE;
+				attackHeight = PLAYER_SIZE + 2 * ATTACK_TOLERANCE;
+				pushX = ATTACK_PUSH_DISTANCE;
+			}
+			case LEFT -> {
+				attackX = playerX - ATTACK_RANGE;
+				attackY = playerY - ATTACK_TOLERANCE;
+				attackWidth = ATTACK_RANGE;
+				attackHeight = PLAYER_SIZE + 2 * ATTACK_TOLERANCE;
+				pushX = -ATTACK_PUSH_DISTANCE;
+			}
+			case UP -> {
+				attackX = playerX - ATTACK_TOLERANCE;
+				attackY = playerY - ATTACK_RANGE;
+				attackWidth = PLAYER_SIZE + 2 * ATTACK_TOLERANCE;
+				attackHeight = ATTACK_RANGE;
+				pushY = -ATTACK_PUSH_DISTANCE;
+			}
+			case DOWN -> {
+				attackX = playerX - ATTACK_TOLERANCE;
+				attackY = playerY + PLAYER_SIZE;
+				attackWidth = PLAYER_SIZE + 2 * ATTACK_TOLERANCE;
+				attackHeight = ATTACK_RANGE;
+				pushY = ATTACK_PUSH_DISTANCE;
+			}
+			default -> {
+				return null;
+			}
+		}
+		return new AttackInfo(attackX, attackY, attackWidth, attackHeight, pushX, pushY);
+	}
+
+	private boolean isTouchingPlayer(int playerX, int playerY, Zombie zombie) {
+		return playerX + PLAYER_SIZE >= zombie.getX()
+				&& playerX <= zombie.getX() + ZOMBIE_SIZE
+				&& playerY + PLAYER_SIZE >= zombie.getY()
+				&& playerY <= zombie.getY() + ZOMBIE_SIZE;
+	}
+
+	private boolean rectanglesIntersect(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh) {
+		return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 	}
 
 	private boolean isInBounds(int row, int col) {
