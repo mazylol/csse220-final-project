@@ -3,6 +3,7 @@ package model;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,14 +20,18 @@ import ui.GameComponent;
  * reset(), getHealth(), handleZombieCollision(), handleDamage().
  */
 public class Player {
+	private static final int DAMAGE_COOLDOWN_TICKS = 30;
+
 	private int x, y;
 	private int width, height;
 	private int startX, startY;
 	private BufferedImage sprite;
+	private BufferedImage damagedSprite;
 	private int gameWidth, gameHeight;
 	private boolean facingRight;
 	private int health;
 	private int damageTime;
+	private boolean recentlyDamaged;
 	
 	public Player(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
@@ -40,6 +45,7 @@ public class Player {
 		this.facingRight = true;
 		this.health = 3;
 		sprite = loadSprite();
+		damagedSprite = sprite == null ? null : createDamageTint(sprite);
 	}
 	
 	private BufferedImage loadSprite() {
@@ -64,13 +70,14 @@ public class Player {
 	
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
+			BufferedImage spriteToDraw = isDamageCooldownActive() && damagedSprite != null ? damagedSprite : sprite;
 			if (facingRight) {
-				g2.drawImage(sprite, x, y, width, height, null);
+				g2.drawImage(spriteToDraw, x, y, width, height, null);
 			} else {
-				g2.drawImage(sprite, x + width, y, -width, height, null);
+				g2.drawImage(spriteToDraw, x + width, y, -width, height, null);
 			}
 		} else {
-			g2.setColor(Color.BLUE);
+			g2.setColor(isDamageCooldownActive() ? new Color(220, 40, 40) : Color.BLUE);
 			g2.fillRect(x, y, width, height);
 		}
 	}
@@ -105,10 +112,10 @@ public class Player {
 	 * Applies contact damage with a short invulnerability cooldown.
 	 */
 	public void handleZombieCollision() {
-		if(GameComponent.getTime()-30>=damageTime) {
+		if (GameComponent.getTime() - damageTime >= DAMAGE_COOLDOWN_TICKS) {
 			this.handleDamage();
-			damageTime=GameComponent.getTime();
-		}else {
+			damageTime = GameComponent.getTime();
+			recentlyDamaged = true;
 		}
 	}
 	
@@ -123,5 +130,17 @@ public class Player {
 			health = 0;
 			GameModel.GameOver();
 		}
+	}
+	
+	private boolean isDamageCooldownActive() {
+		return recentlyDamaged && GameComponent.getTime() - damageTime < DAMAGE_COOLDOWN_TICKS;
+	}
+	
+	// this basically boosts the red channel of the player an dims the others
+	private BufferedImage createDamageTint(BufferedImage source) {
+		float[] scales = {1.4f, 0.7f, 0.7f, 1f};
+		float[] offsets = {0f, 0f, 0f, 0f};
+		RescaleOp op = new RescaleOp(scales, offsets, null);
+		return op.filter(source, null);
 	}
 }
