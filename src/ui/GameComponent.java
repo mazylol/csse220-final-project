@@ -19,12 +19,6 @@ import model.Zombie;
 
 /**
  * Main rendering panel for the game world and HUD.
- *
- * Fields: WIDTH, HEIGHT, BG, FG, model, floorSprite, wallSprite, gemSprite,
- * doorSprite, timer, GameTime.
- * Methods: GameComponent(...), startTimer(), getTime(), loadResource(...),
- * paintComponent(...), drawLevel(...), drawFloorTile(...),
- * drawWithFallback(...), drawHud(...).
  */
 public class GameComponent extends JPanel {
 	public static final int WIDTH = 600;
@@ -40,7 +34,12 @@ public class GameComponent extends JPanel {
 	private BufferedImage keySprite;
 	private Timer timer;
 	public static int GameTime;
-
+	
+	/**
+	 * Creates the game component and loads sprites.
+	 *
+	 * @param model game model driving the render state
+	 */
 	public GameComponent(GameModel model) {
 		this.model = model;
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -62,10 +61,16 @@ public class GameComponent extends JPanel {
 		//timer.start();
 	}
 	
+	/**
+	 * Starts the animation timer.
+	 */
 	public void startTimer() {
 	    timer.start();
 	}	
 	
+	/**
+	 * Restarts the game state and redraws the screen.
+	 */
 	public void restartGame() {
 		timer.stop();
 		GameTime = 0;
@@ -74,6 +79,9 @@ public class GameComponent extends JPanel {
 		timer.start();
 	}
 	
+	/**
+	 * @return the current game time in ticks
+	 */
 	public static int getTime() {
 		return GameTime;
 	}
@@ -90,6 +98,11 @@ public class GameComponent extends JPanel {
 		}
 	}
 
+	/**
+	 * Paints the current game frame including level, actors, and HUD.
+	 *
+	 * @param g graphics context
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

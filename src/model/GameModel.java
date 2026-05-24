@@ -8,16 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Stores and updates all game state and core rules.
- *
- * Fields: player, zombies, level, GAME_WIDTH, GAME_HEIGHT, PLAYER_SIZE,
- * ZOMBIE_SIZE, TILE_SIZE, DEFAULT_LEVEL, gemsRemaining, hasKey, won, lost.
- * Methods: GameModel(), getPlayer(), getZombies(), getLevel(),
- * getGemsRemaining(), hasKey(), hasWon(), hasLost(), update(),
- * movePlayerUp(...), movePlayerDown(...), movePlayerLeft(...),
- * movePlayerRight(...), checkZombieCollision(), loadLevel(...),
- * movePlayerBy(...), checkZombieWallCollision(...), isWallCollision(...),
- * applyTileEffects(), isInBounds(...), getHealth(), GameOver().
+ * Stores and updates all game state, including level data, actors, and rules.
  */
 public class GameModel {
 	private static final class AttackInfo {
@@ -58,40 +49,67 @@ public class GameModel {
 	private static boolean lost;
 	public static int currentLevel;
 	
+	/**
+	 * Creates a new game model and loads the default level.
+	 */
 	public GameModel() {
 		this.zombies = new ArrayList<>();
 		loadLevel(DEFAULT_LEVEL);
 		currentLevel = 1;
 	}
 	
+	/**
+	 * @return the player instance for the current level
+	 */
 	public Player getPlayer() {
 		return this.player;
 	}
 	
+	/**
+	 * @return an unmodifiable list of zombies in the current level
+	 */
 	public List<Zombie> getZombies() {
 		return Collections.unmodifiableList(this.zombies);
 	}
 
+	/**
+	 * @return the 2D grid representing level tiles
+	 */
 	public ArrayList<ArrayList<Item>> getLevel() {
 		return this.level;
 	}
 
+	/**
+	 * @return the number of gems remaining to collect
+	 */
 	public int getGemsRemaining() {
 		return this.gemsRemaining;
 	}
 
+	/**
+	 * @return true if the player has collected the key
+	 */
 	public boolean hasKey() {
 		return this.hasKey;
 	}
 
+	/**
+	 * @return true if the player has met win conditions for the current level
+	 */
 	public boolean hasWon() {
 		return this.won;
 	}
 	
+	/**
+	 * @return true if the player has lost the game
+	 */
 	public boolean hasLost() {
 		return this.lost;
 	}
 	
+	/**
+	 * Updates zombie movement and resolves wall collisions.
+	 */
 	public void update() {
 		for (Zombie zombie : zombies) {
 			if (zombie.hasKnockback()) {
@@ -111,22 +129,45 @@ public class GameModel {
 		}
 	}
 	
+	/**
+	 * Moves the player up by the given number of pixels.
+	 *
+	 * @param n pixels to move
+	 */
 	public void movePlayerUp(int n) {
 		movePlayerBy(0, -n);
 	}
 	
+	/**
+	 * Moves the player down by the given number of pixels.
+	 *
+	 * @param n pixels to move
+	 */
 	public void movePlayerDown(int n) {
 		movePlayerBy(0, n);
 	}
 	
+	/**
+	 * Moves the player left by the given number of pixels.
+	 *
+	 * @param n pixels to move
+	 */
 	public void movePlayerLeft(int n) {
 		movePlayerBy(-n, 0);
 	}
 	
+	/**
+	 * Moves the player right by the given number of pixels.
+	 *
+	 * @param n pixels to move
+	 */
 	public void movePlayerRight(int n) {
 		movePlayerBy(n, 0);
 	}
 
+	/**
+	 * Attempts to attack the nearest zombie within the attack arc.
+	 */
 	public void attemptAttack() {
 		if (won || lost) {
 			return;
@@ -153,6 +194,12 @@ public class GameModel {
 		}
 	}
 
+	/**
+	 * Checks if a zombie is currently within the player's attack range.
+	 *
+	 * @param zombie zombie to evaluate
+	 * @return true if the zombie is in range and not overlapping the player
+	 */
 	public boolean isZombieInAttackRange(Zombie zombie) {
 		if (won || lost) {
 			return false;
@@ -170,6 +217,9 @@ public class GameModel {
 		return !isTouchingPlayer(playerX, playerY, zombie);
 	}
 	
+	/**
+	 * Applies contact damage if a zombie overlaps the player.
+	 */
 	public void checkZombieCollision(){
 		for (Zombie zombie : zombies) {
 			boolean compareX = (player.getX() + PLAYER_SIZE >= zombie.getX()) && (player.getX() <= zombie.getX() + ZOMBIE_SIZE);
@@ -274,6 +324,12 @@ public class GameModel {
 		applyTileEffects();
 	}
 
+	/**
+	 * Checks whether a zombie intersects any wall tiles.
+	 *
+	 * @param zombie zombie to test
+	 * @return true if the zombie collides with a wall tile
+	 */
 	public boolean checkZombieWallCollision(Zombie zombie) {
 		int leftCol = zombie.getX() / TILE_SIZE;
 		int rightCol = (zombie.getX() + zombie.getWidth() - 1) / TILE_SIZE;
@@ -393,23 +449,38 @@ public class GameModel {
 		return row >= 0 && row < level.size() && col >= 0 && col < level.get(row).size();
 	}
 
+	/**
+	 * @return the player's current health
+	 */
 	public int getHealth() {
 		return player.getHealth();
 	}
 	
+	/**
+	 * Marks the game as lost.
+	 */
 	public static void GameOver() {
 		lost = true;
 	}
 	
+	/**
+	 * Resets the game to the first level.
+	 */
 	public void restartGame() {
 		currentLevel = 1;
 		loadLevel(DEFAULT_LEVEL);
 	}
 	
+	/**
+	 * @return true if the current level is completed
+	 */
 	public boolean getWon() {
 		return won;
 	}
 	
+	/**
+	 * Loads the next level if the first level has been completed.
+	 */
 	public void proceed() {
 		if(won&&currentLevel==1) {
 			loadLevel(NEXT_LEVEL);

@@ -13,10 +13,6 @@ import model.GameModel;
 
 /**
  * Top-level Swing window that manages screens, input, and movement loop timing.
- *
- * Fields: MOVE_STEP, FRAME_DELAY_MS, frame, model, gameComponent, gameLoop,
- * movingUp, movingDown, movingLeft, movingRight.
- * Methods: GameWindow(...), show().
  */
 public class GameWindow extends JPanel {
 	private static final int MOVE_STEP = 5;
@@ -31,6 +27,11 @@ public class GameWindow extends JPanel {
 	private boolean movingLeft;
 	private boolean movingRight;
 	
+	/**
+	 * Creates the main window and wires input handlers.
+	 *
+	 * @param model game model to control and display
+	 */
 	public GameWindow(GameModel model) {
 		this.model = model;
 		this.frame = new JFrame("CSSE220 Final Project");
@@ -127,6 +128,9 @@ public class GameWindow extends JPanel {
 		this.gameComponent.restartGame();
 	}
 
+	/**
+	 * Shows the window and starts the movement loop.
+	 */
 	public void show() {
 		this.frame.setVisible(true);
 		this.gameComponent.requestFocusInWindow();

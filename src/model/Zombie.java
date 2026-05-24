@@ -11,12 +11,6 @@ import javax.imageio.ImageIO;
 
 /**
  * Represents an enemy that moves automatically and bounces around the map.
- *
- * Fields: x, y, width, height, startX, startY, sprite, gameWidth, gameHeight,
- * dx, dy, facingRight, direction, random.
- * Methods: Zombie(...), loadSprite(), getX(), getY(), drawOn(...), update(),
- * updateDirection(), reset(), getWidth(), getHeight(), getDX(), getDY(),
- * backTrack().
  */
 public class Zombie {
 	private int x, y;
@@ -34,6 +28,16 @@ public class Zombie {
 	private int knockbackStepX;
 	private int knockbackStepY;
 	
+	/**
+	 * Creates a zombie with a starting position and game bounds.
+	 *
+	 * @param startX starting x coordinate in pixels
+	 * @param startY starting y coordinate in pixels
+	 * @param width width of the zombie sprite in pixels
+	 * @param height height of the zombie sprite in pixels
+	 * @param gameWidth width of the playable area in pixels
+	 * @param gameHeight height of the playable area in pixels
+	 */
 	public Zombie(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
 		this.y = startY;
@@ -61,14 +65,25 @@ public class Zombie {
 		}
 	}
 	
+	/**
+	 * @return current x coordinate in pixels
+	 */
 	public int getX() {
 		return this.x;
 	}
 	
+	/**
+	 * @return current y coordinate in pixels
+	 */
 	public int getY() {
 		return this.y;
 	}
 	
+	/**
+	 * Draws the zombie sprite or a fallback rectangle.
+	 *
+	 * @param g2 graphics context to draw onto
+	 */
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
 			if (facingRight) {
@@ -118,6 +133,12 @@ public class Zombie {
 		
 	}
 
+	/**
+	 * Moves the zombie and clamps it within the game bounds.
+	 *
+	 * @param moveX change in x position in pixels
+	 * @param moveY change in y position in pixels
+	 */
 	public void moveBy(int moveX, int moveY) {
 		if (moveX > 0) {
 			facingRight = true;
@@ -133,6 +154,13 @@ public class Zombie {
 		if (y + height > gameHeight) y = gameHeight - height;
 	}
 	
+	/**
+	 * Starts a knockback animation over a fixed number of ticks.
+	 *
+	 * @param totalX total horizontal displacement in pixels
+	 * @param totalY total vertical displacement in pixels
+	 * @param durationTicks number of update ticks to apply the knockback
+	 */
 	public void startKnockback(int totalX, int totalY, int durationTicks) {
 		knockbackRemainingX = totalX;
 		knockbackRemainingY = totalY;
@@ -145,6 +173,11 @@ public class Zombie {
 		knockbackStepY = totalY == 0 ? 0 : (int) Math.copySign(Math.max(1, Math.abs(totalY) / durationTicks), totalY);
 	}
 	
+	/**
+	 * Applies one knockback step if active.
+	 *
+	 * @return true if a knockback step was applied
+	 */
 	public boolean applyKnockbackStep() {
 		if (!hasKnockback()) {
 			return false;
@@ -157,10 +190,16 @@ public class Zombie {
 		return true;
 	}
 	
+	/**
+	 * @return true if any knockback displacement remains
+	 */
 	public boolean hasKnockback() {
 		return knockbackRemainingX != 0 || knockbackRemainingY != 0;
 	}
 	
+	/**
+	 * Cancels any active knockback.
+	 */
 	public void clearKnockback() {
 		knockbackRemainingX = 0;
 		knockbackRemainingY = 0;
@@ -208,27 +247,45 @@ public class Zombie {
 		}
 	}
 	
+	/**
+	 * Resets the zombie to its starting position.
+	 */
 	public void reset() {
 		this.x = startX;
 		this.y = startY;
 	}
 	
+	/**
+	 * @return zombie width in pixels
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * @return zombie height in pixels
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * @return current horizontal direction scalar
+	 */
 	public int getDX() {
 		return dx;
 	}
 	
+	/**
+	 * @return current vertical direction scalar
+	 */
 	public int getDY() {
 		return dy;
 	}
 	
+	/**
+	 * Rewinds the zombie position by a single movement step.
+	 */
 	public void backTrack() {
 		this.x-=5*dx;
 		this.y-=5*dy;

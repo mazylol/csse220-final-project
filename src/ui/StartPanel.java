@@ -11,15 +11,15 @@ import javax.swing.SwingConstants;
 
 /**
  * Simple start screen panel shown before gameplay begins.
- *
- * Fields: title, button.
- * Methods: StartPanel().
  */
 public class StartPanel extends JPanel {
 	private JLabel title;
 	private JLabel tutorial;
 	public JButton button;
 
+    /**
+     * Creates the start screen with instructions and a start button.
+     */
     public StartPanel() {
     	this.setLayout(new BorderLayout());
     	this.setPreferredSize(new Dimension(GameComponent.WIDTH, GameComponent.HEIGHT));

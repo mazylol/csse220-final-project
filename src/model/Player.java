@@ -12,14 +12,10 @@ import javax.imageio.ImageIO;
 import ui.GameComponent;
 
 /**
- * Represents the player avatar and its state in the game world.
- *
- * Fields: x, y, width, height, startX, startY, sprite, gameWidth, gameHeight,
- * facingRight, health, damageTime.
- * Methods: Player(...), loadSprite(), getX(), getY(), drawOn(...), moveBy(...),
- * reset(), getHealth(), handleZombieCollision(), handleDamage().
+ * Represents the player sprite, including movement, rendering, and health state.
  */
 public class Player {
+	/** Cardinal directions used for facing and attack orientation. */
 	public enum FacingDirection {
 		UP,
 		DOWN,
@@ -41,6 +37,16 @@ public class Player {
 	private int damageTime;
 	private boolean recentlyDamaged;
 	
+	/**
+	 * Creates a player with a starting position and game bounds.
+	 *
+	 * @param startX starting x coordinate in pixels
+	 * @param startY starting y coordinate in pixels
+	 * @param width width of the player sprite in pixels
+	 * @param height height of the player sprite in pixels
+	 * @param gameWidth width of the playable area in pixels
+	 * @param gameHeight height of the playable area in pixels
+	 */
 	public Player(int startX, int startY, int width, int height, int gameWidth, int gameHeight) {
 		this.x = startX;
 		this.y = startY;
@@ -69,22 +75,39 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * @return current x coordinate in pixels
+	 */
 	public int getX() {
 		return this.x;
 	}
 	
+	/**
+	 * @return current y coordinate in pixels
+	 */
 	public int getY() {
 		return this.y;
 	}
 
+	/**
+	 * @return true if the sprite is facing right
+	 */
 	public boolean isFacingRight() {
 		return facingRight;
 	}
 	
+	/**
+	 * @return current facing direction for attacks and movement
+	 */
 	public FacingDirection getFacingDirection() {
 		return facingDirection;
 	}
 	
+	/**
+	 * Draws the player sprite or fallback shape at the current position.
+	 *
+	 * @param g2 graphics context to draw onto
+	 */
 	public void drawOn(Graphics2D g2) {
 		if (sprite != null) {
 			BufferedImage spriteToDraw = isDamageCooldownActive() && damagedSprite != null ? damagedSprite : sprite;
@@ -99,6 +122,12 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Moves the player and clamps position to the game bounds.
+	 *
+	 * @param dx change in x position in pixels
+	 * @param dy change in y position in pixels
+	 */
 	public void moveBy(int dx, int dy) {
 		if (dx > 0) {
 			facingRight = true;
@@ -122,11 +151,17 @@ public class Player {
 		if (y + height > gameHeight) y = gameHeight - height;
 	}
 	
+	/**
+	 * Resets the player to the starting position.
+	 */
 	public void reset() {
 		this.x = startX;
 		this.y = startY;
 	}
 	
+	/**
+	 * @return current player health
+	 */
 	public int getHealth() {
 		return health;
 	}
@@ -159,7 +194,7 @@ public class Player {
 		return recentlyDamaged && GameComponent.getTime() - damageTime < DAMAGE_COOLDOWN_TICKS;
 	}
 	
-	// this basically boosts the red channel of the player an dims the others
+	// Boosts the red channel of the player and dims the others.
 	private BufferedImage createDamageTint(BufferedImage source) {
 		float[] scales = {1.4f, 0.7f, 0.7f, 1f};
 		float[] offsets = {0f, 0f, 0f, 0f};
