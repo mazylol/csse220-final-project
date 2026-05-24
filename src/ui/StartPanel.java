@@ -27,8 +27,8 @@ public class StartPanel extends JPanel {
     	this.title = new JLabel("Game Start");
     	this.title.setHorizontalAlignment(SwingConstants.CENTER);
     	
-    	String instructions = "Instructions: Move with WASD/Arrow Keys. Your goal is to collect all of the gems in a level, the key, and then move move to the exit.";
-    	int instructionWidth = GameComponent.WIDTH - 80;
+    	String instructions = "Instructions: Move with WASD/Arrow Keys. You can push enemies away if you are facing them and press space when the yellow indicator appears. Your goal is to collect all of the gems in a level, the key, and then move move to the exit.";
+    	int instructionWidth = GameComponent.WIDTH - 160;
     	this.tutorial = new JLabel("<html><div style='text-align: center; width: " + instructionWidth + "px;'>" + instructions + "</div></html>");
     	this.tutorial.setHorizontalAlignment(SwingConstants.CENTER);
 
